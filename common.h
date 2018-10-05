@@ -1,4 +1,4 @@
-/* $OpenBSD: common.h,v 1.10 2018/06/13 15:02:09 reyk Exp $ */
+/* $OpenBSD$ */
 /*-
  * Copyright (c) 2001 Hans Insulander <hin@openbsd.org>.
  * All rights reserved.
@@ -38,12 +38,14 @@
 #include <login_cap.h>
 #include <bsd_auth.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 #include <pwd.h>
 #include <err.h>
 #include <util.h>
 #include <limits.h>
 #include <readpassphrase.h>
+#include <paths.h>
 
 #define MODE_LOGIN 0
 #define MODE_CHALLENGE 1
@@ -51,6 +53,8 @@
 
 #define AUTH_OK 0
 #define AUTH_FAILED -1
+
+#define DURESS_FILE "/etc/duress"
 
 extern FILE *back;
 

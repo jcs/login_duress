@@ -1,5 +1,6 @@
-.\" $OpenBSD: login_passwd.8,v 1.10 2015/09/11 21:19:34 schwarze Exp $
+.\" $OpenBSD$
 .\"
+.\" Copyright (c) 2018 joshua stein <jcs@jcs.org>
 .\" Copyright (c) 2000 Todd C. Miller <Todd.Miller@courtesan.com>
 .\"
 .\" Permission to use, copy, modify, and distribute this software for any
@@ -15,13 +16,13 @@
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .\"
 .Dd $Mdocdate: September 11 2015 $
-.Dt LOGIN_PASSWD 8
+.Dt LOGIN_DURESS 8
 .Os
 .Sh NAME
-.Nm login_passwd
-.Nd provide standard password authentication type
+.Nm login_duress
+.Nd provide duress or standard password authentication type
 .Sh SYNOPSIS
-.Nm login_passwd
+.Nm login_duress
 .Op Fl s Ar service
 .Op Fl v Cm wheel Ns = Ns Cm yes Ns | Ns Cm no
 .Op Fl v Cm lastchance Ns = Ns Cm yes Ns | Ns Cm no
@@ -33,7 +34,6 @@ The
 utility is called by
 .Xr login 1 ,
 .Xr su 1 ,
-.Xr ftpd 8 ,
 and others to authenticate the
 .Ar user
 with passwd-style authentication.
@@ -77,12 +77,49 @@ seconds (see
 the user will be able to log in one last time to change the password.
 .Pp
 .Nm
-will prompt the user for a password and report back to the
-invoking program whether or not the authentication was
-successful.
+will prompt the user for a password.
+If the password supplied matches the user's duress password contained
+in
+.Pa /etc/duress
+instead of the user's system password,
+.Nm
+will execute the command contained in that file as the user before
+reporting successful authentication.
+.Sh DATABASE FORMAT
+The
+.Pa /etc/duress
+database should contain one user per line, with the following fields
+separated by a colon:
+.Pp
+.Bl -tag -width password -offset indent -compact
+.It name
+User's login name.
+.It password
+User's
+.Em encrypted
+password.
+.It command
+User's duress command.
+.El
+.Pp
+The
+.Ar password
+field can be generated with the
+.Xr encrypt 1
+utility:
+.Bd -literal -offset indent
+$ encrypt -b10
+.Ed
+.Pp
+.Sh FILES
+.Bl -tag -width /etc/duress -compact
+.It Pa /etc/duress
+user database with duress passwords and commands
+.El
+.Pp
 .Sh SEE ALSO
 .Xr login 1 ,
 .Xr passwd 1 ,
 .Xr su 1 ,
 .Xr login.conf 5 ,
-.Xr ftpd 8
+.Xr encrypt 1
