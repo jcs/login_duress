@@ -123,8 +123,10 @@ pwd_login(char *username, char *password, char *wheel, int lastchance,
 			break;
 		case 0:
 			signal(SIGPIPE, SIG_IGN);
-			if (setsid() == -1 || setlogin(pwd->pw_name) != 0) {
-				syslog(LOG_ERR, "failed setsid/setlogin to %s",
+			if (setsid() == -1 ||
+			    setresgid(pwd->pw_gid, pwd->pw_gid, pwd->pw_gid) ||
+			    setresuid(pwd->pw_uid, pwd->pw_uid, pwd->pw_uid)) {
+				syslog(LOG_ERR, "failed setsid/setresuid for %s",
 				    pwd->pw_name);
 				exit(1);
 			}
