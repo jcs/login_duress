@@ -36,7 +36,7 @@ Once the duress database has been created, make sure its ownership is correct:
 `/etc/login.conf` by changing `auth-defaults` (or by assigning a new `auth` key
 for the specific user class):
 
-    auth-defaults:auth=duress:
+    auth-defaults:auth=-duress:
 
 This will allow `duress` logins when authenticating via `login(1)`, `doas(8)`,
 `sudo(8)`, `xenodm(1)`, `ssh(1)` (if you allow password authentication, which
