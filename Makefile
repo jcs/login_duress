@@ -1,6 +1,6 @@
 # $OpenBSD$
 
-PROG=	login_duress
+PROG=	login_-duress
 MAN=	login_duress.8
 SRCS=	login.c login_duress.c
 DPADD=	${LIBUTIL}
