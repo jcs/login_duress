@@ -1,6 +1,7 @@
 /* $OpenBSD$ */
 
 /*-
+ * Copyright (c) 2018 joshua stein <jcs@jcs.org>
  * Copyright (c) 2001 Hans Insulander <hin@openbsd.org>.
  * All rights reserved.
  *
