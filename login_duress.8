@@ -31,12 +31,17 @@
 .Sh DESCRIPTION
 The
 .Nm
-utility is called by
+utility can be called by
 .Xr login 1 ,
 .Xr su 1 ,
 and others to authenticate the
 .Ar user
-with passwd-style authentication.
+with passwd-style authentication, using a password defined in the
+duress database.
+If the user is not present in the database or the password does not
+match, the user is authenticated against the system password database
+similar to
+.Xr login_passwd 8 .
 .Pp
 The
 .Ar user
@@ -69,8 +74,8 @@ If the
 .Cm lastchance
 argument is specified and is equal to
 .Cm yes ,
-then if the user's password has expired, and it has not been
-expired longer than
+then if the user's password in the standard password database has
+expired, and it has not been expired longer than
 .Dq password-dead
 seconds (see
 .Xr login.conf 5 ) ,
@@ -80,11 +85,17 @@ the user will be able to log in one last time to change the password.
 will prompt the user for a password.
 If the password supplied matches the user's duress password contained
 in
-.Pa /etc/duress
-instead of the user's system password,
+.Pa /etc/duress ,
 .Nm
 will execute the command contained in that file as the user before
 reporting successful authentication.
+.Pp
+If the password does not match the duress password or the user is not
+present in the duress database,
+.Nm
+will attempt to authenticate the password against the standard system
+password database similar to
+.Xr login_passwd 8 .
 .Sh DATABASE FORMAT
 The
 .Pa /etc/duress
@@ -118,6 +129,7 @@ user database with duress passwords and commands
 .Sh SEE ALSO
 .Xr encrypt 1 ,
 .Xr login 1 ,
+.Xr login_passwd 1 ,
 .Xr passwd 1 ,
 .Xr su 1 ,
 .Xr login.conf 5

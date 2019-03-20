@@ -19,7 +19,7 @@ Compile and install the module with `make install`.
 
 Create a duress database at `/etc/duress` in the format of:
 
-    user:encrypted password:duress command
+    user:encrypted_password:duress_command
 
 The encrypted password hash can be generated with `encrypt -b10 -p`.
 
