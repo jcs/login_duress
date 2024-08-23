@@ -49,7 +49,7 @@ int
 pwd_login(char *username, char *password, char *wheel, int lastchance,
     char *class, struct passwd *pwd)
 {
-	size_t plen, linesize, cmdsize;
+	size_t plen, linesize = 0, cmdsize;
 	char *goodhash = NULL;
 	char *dline = NULL, *odline = NULL, *tok = NULL, *cmd = NULL;
 	char *environ[6];
@@ -74,12 +74,12 @@ pwd_login(char *username, char *password, char *wheel, int lastchance,
 
 	duress = fopen(DURESS_FILE, "re");
 	if (duress != NULL) {
-		while (getline(&dline, &linesize, duress) != -1) {
-			odline = dline;
+		while (getline(&odline, &linesize, duress) != -1) {
+			dline = odline;
 
 			tok = strsep(&dline, ":");
 			if (strcmp(tok, username) != 0)
-				continue;
+				goto next_user;
 
 			tok = strsep(&dline, ":");
 			if (crypt_checkpass(password, tok) == 0) {
@@ -87,10 +87,15 @@ pwd_login(char *username, char *password, char *wheel, int lastchance,
 
 				cmdsize = strlen(tok) + 1;
 				cmd = malloc(cmdsize);
+				if (cmd == NULL) {
+					syslog(LOG_ERR, "malloc: %m");
+					return (AUTH_FAILED);
+				}
 				strlcpy(cmd, tok, cmdsize);
 			}
+next_user:
+			explicit_bzero(odline, linesize);
 		}
-		explicit_bzero(odline, linesize);
 		free(odline);
 		fclose(duress);
 	}
