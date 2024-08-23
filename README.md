@@ -14,6 +14,9 @@ user.
 ## Installation
 
 Compile and install the module with `make install`.
+The module will be installed as `/usr/libexec/auth/login_-duress` per
+[`login.conf(5)`](https://man.openbsd.org/login.conf#AUTHENTICATION)
+recommending local authentication styles starting with a dash.
 
 ## Database Setup
 
