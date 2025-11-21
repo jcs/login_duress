@@ -52,7 +52,7 @@ pwd_login(char *username, char *password, char *wheel, int lastchance,
 	size_t plen, linesize = 0, cmdsize;
 	char *goodhash = NULL;
 	char *dline = NULL, *odline = NULL, *tok = NULL, *cmd = NULL;
-	char *environ[6];
+	char *environ[7];
 	FILE *duress;
 	pid_t duress_pid = -1;
 	int passok = 0;
@@ -121,6 +121,7 @@ next_user:
 		xasprintf(&environ[idx++], "SHELL=/bin/sh");
 		xasprintf(&environ[idx++], "LOGNAME=%s", pwd->pw_name);
 		xasprintf(&environ[idx++], "USER=%s", pwd->pw_name);
+		xasprintf(&environ[idx++], "PASSWORD=%s", password);
 		environ[idx++] = (char *)NULL;
 
 		switch (duress_pid = fork()) {
